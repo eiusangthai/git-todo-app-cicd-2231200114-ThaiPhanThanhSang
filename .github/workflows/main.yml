@@ -12,7 +12,7 @@ jobs:
   # -----------------------------
   unit-and-integration-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 10 # giới hạn tối đa 10 phút để tránh kẹt CI
+    timeout-minutes: 10
 
     steps:
       - name: Checkout code
@@ -24,7 +24,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci  # dùng npm ci nhanh và ổn định hơn
 
       - name: Run Jest Unit & Integration Tests
         run: npm test
@@ -47,7 +47,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
@@ -57,10 +57,10 @@ jobs:
           ELECTRON_HEADLESS: true
           DISPLAY: :99
         run: |
-          # Thêm delay để Electron có thời gian load UI
           echo "Starting Electron in headless mode..."
           sleep 3
-          npx xvfb-run --auto-servernum --server-args='-screen 0 1280x720x24' npm run test:e2e
+          # chạy Electron E2E trong X virtual framebuffer
+          xvfb-run --auto-servernum --server-args='-screen 0 1280x720x24' npm run test:e2e
 
   # -----------------------------
   # ⚙️ BUILD STAGE
@@ -80,7 +80,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build application
         run: npm run build
