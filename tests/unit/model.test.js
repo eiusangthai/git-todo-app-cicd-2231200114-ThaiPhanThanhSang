@@ -2,6 +2,7 @@ const { TodoService } = require('../../js/model');
 
 describe('TodoService Unit Tests', () => {
     let service;
+    let a;
 
     beforeEach(() => {
         // Create a new service instance for each test to ensure isolation
