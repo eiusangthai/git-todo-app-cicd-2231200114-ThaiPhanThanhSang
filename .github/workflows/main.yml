@@ -56,7 +56,13 @@ jobs:
         run: |
           echo "Setting up virtual display..."
           sudo apt-get update
-          sudo apt-get install -y xvfb libnss3 libxss1 libasound2 libatk-bridge2.0-0 libgtk-3-0
+          sudo apt-get install -y \
+            xvfb \
+            libnss3 \
+            libxss1 \
+            libatk-bridge2.0-0 \
+            libgtk-3-0 \
+            libasound2t64 || true  # fallback nếu libasound2t64 đã có
           export DISPLAY=:99
           Xvfb :99 -screen 0 1280x720x24 &
 
@@ -67,10 +73,10 @@ jobs:
         run: |
           echo "Starting Electron in headless mode..."
           sleep 5
-          npx playwright test tests/e2e --reporter=list || echo "E2E tests failed!"
+          npx playwright test tests/e2e --reporter=list
 
       - name: Upload Playwright Test Artifacts (screenshots, videos, traces)
-        if: always() # luôn upload kể cả khi fail
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-results
